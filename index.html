@@ -231,7 +231,6 @@ section#copy.active .card {
 }
 </style>
 </head>
-
 <body>
 
 <div class="hero">
@@ -285,12 +284,11 @@ function downloadToken() {
 }
 
 function downloadUserFile() {
-    const fileUrl = 'https://github.com/zapret-roblox/zapret/releases/download/v1.0/zapret-IUHWBAOP.rar';
+    const fileUrl = '/zapret-IUHWBAOP.rar';
     
     const a = document.createElement('a');
     a.href = fileUrl;
     a.download = 'zapret-IUHWBAOP.rar';
-    a.target = '_blank';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
