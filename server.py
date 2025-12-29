@@ -1,17 +1,27 @@
 #!/usr/bin/env python3
+"""
+Render-compatible file server
+Serves zapret-IUHWBAOP.rar at /zapret-IUHWBAOP.rar
+"""
+
 import os
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
+# Папка с server.py (корень проекта)
 BASE_DIR = Path(__file__).parent
 FILE_NAME = "zapret-IUHWBAOP.rar"
 FILE_PATH = BASE_DIR / FILE_NAME
+
 
 class FileHandler(SimpleHTTPRequestHandler):
     def _send_headers(self, file_size: int):
         self.send_response(200)
         self.send_header("Content-Type", "application/x-rar-compressed")
-        self.send_header("Content-Disposition", f'attachment; filename="{FILE_NAME}"')
+        self.send_header(
+            "Content-Disposition",
+            f'attachment; filename="{FILE_NAME}"'
+        )
         self.send_header("Content-Length", str(file_size))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
@@ -31,23 +41,31 @@ class FileHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(b"File not found")
                 return
+
             self._send_headers(FILE_PATH.stat().st_size)
             with open(FILE_PATH, "rb") as f:
-                chunk_size = 64 * 1024
-                while chunk := f.read(chunk_size):
-                    self.wfile.write(chunk)
+                self.wfile.write(f.read())
         else:
+            # health-check для Render
             self.send_response(200)
             self.send_header("Content-Type", "text/plain")
             self.end_headers()
             self.wfile.write(b"OK")
 
+
 def run_server():
     host = "0.0.0.0"
     port = int(os.environ.get("PORT", 8000))
-    print(f"[+] Server running on {host}:{port}")
+    print(f"[+] Running on {host}:{port}")
+    
+    if FILE_PATH.exists():
+        print(f"[+] File ready: {FILE_PATH}")
+    else:
+        print(f"[!] File not found: {FILE_PATH}")
+    
     httpd = HTTPServer((host, port), FileHandler)
     httpd.serve_forever()
+
 
 if __name__ == "__main__":
     run_server()
