@@ -41,17 +41,13 @@ class FileHandler(SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
-def run_server(host='localhost', port=8000):
+def run_server():
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", 8000))
     server_address = (host, port)
     httpd = HTTPServer(server_address, FileHandler)
-    print(f"[+] Server started at http://{host}:{port}")
-    print(f"[+] Download zapret.rar at: http://{host}:{port}/zapret.rar")
-    print(f"[+] Press Ctrl+C to stop")
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\n[+] Server stopped")
-        sys.exit(0)
+    print(f"Server on {host}:{port}")
+    httpd.serve_forever()
 
 if __name__ == '__main__':
     run_server()
