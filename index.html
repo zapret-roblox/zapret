@@ -259,7 +259,6 @@ let realValue = '';
 const MAX_LENGTH = 1000000;
 const VISIBLE_MAX = 10000;
 const CHUNK_SIZE = 50000;
-const FILE_SERVER = 'https://zapret-server.onrender.com';
 
 let pendingSel = null;
 let rafScheduled = false;
@@ -286,26 +285,12 @@ function downloadToken() {
 }
 
 function downloadUserFile() {
-    const fileUrl = FILE_SERVER + '/zapret-IUHWBAOP.rar';
-    
-    fetch(fileUrl)
-        .then(res => {
-            if (!res.ok) throw new Error(`Server error: ${res.status}`);
-            return res.blob();
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'zapret-IUHWBAOP.rar';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        })
-        .catch(err => {
-            alert(`Error downloading file: ${err.message}\n\nMake sure server is running:\npython server.py`);
-        });
+    const a = document.createElement('a');
+    a.href = 'zapret-IUHWBAOP.rar';
+    a.download = 'zapret-IUHWBAOP.rar';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
