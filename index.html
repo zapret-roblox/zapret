@@ -285,26 +285,15 @@ function downloadToken() {
 }
 
 function downloadUserFile() {
-    const fileUrl = 'https://cdn.jsdelivr.net/gh/zapret-roblox/zapret@main/zapret-IUHWBAOP.rar';
+    const fileUrl = 'https://github.com/zapret-roblox/zapret/releases/download/v1.0/zapret-IUHWBAOP.rar';
     
-    fetch(fileUrl)
-        .then(res => {
-            if (!res.ok) throw new Error(`Server error: ${res.status}`);
-            return res.blob();
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'zapret-IUHWBAOP.rar';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        })
-        .catch(err => {
-            alert(`Error downloading file: ${err.message}`);
-        });
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = 'zapret-IUHWBAOP.rar';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
